@@ -3,7 +3,8 @@ import Categories from './categories'
 import Header from './header'
 import PostList from './postList'
 import { connect } from 'react-redux'
-import { fetchPosts } from '../actions/post-actions'
+import { withRouter } from 'react-router-dom'
+import { fetchPosts, fetchPostsByCategory } from '../actions/post-actions'
 
 class Main extends Component {
   constructor(props) {
@@ -11,7 +12,12 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchPosts()
+    const category = this.props.match.path.split('/')[1]
+
+    if (category.length === 0)
+      this.props.fetchPosts()
+    else
+      this.props.fetchPostsByCategory(category)
   }
 
   render() {
@@ -51,5 +57,8 @@ class Main extends Component {
 }
 
 const mapStateToProps = ({ posts }) => ({ posts: Object.keys(posts).map(key => (posts[key])) })
-const mapDispatchToProps = (dispatch) => ({ fetchPosts: () => dispatch(fetchPosts()) })
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+const mapDispatchToProps = (dispatch) => ({
+  fetchPosts: () => dispatch(fetchPosts()),
+  fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category))
+})
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main))

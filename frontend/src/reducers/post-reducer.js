@@ -1,4 +1,4 @@
-import { FETCH_POSTS, SEND_POST_VOTE } from '../constants/action-types'
+import { FETCH_POSTS, SEND_POST_VOTE, DELETE_POST } from '../constants/action-types'
 
 const postReducer = (state={}, action) => {
   switch(action.type) {
@@ -9,9 +9,10 @@ const postReducer = (state={}, action) => {
       }, {})
 
     case SEND_POST_VOTE.SUCCESS:
-      console.log(action.data)
       return { ...state, [action.data.id]: action.data }
 
+    case DELETE_POST.SUCCESS:
+      return { ...state, [action.data.id]: action.data }
 
     default:
       return state
