@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import queryString from 'query-string'
 import Categories from './categories'
 import Header from './header'
 import PostList from './postList'
@@ -6,9 +7,17 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { fetchPosts, fetchPostsByCategory } from '../actions/post-actions'
 
+const sortOptions = {
+  'timestamp_asc': { name: 'Newest', method: (a, b) => (a.timestamp < b.timestamp ) },
+  'timestamp_dsc': { name: 'Oldest', method: (a, b) => (a.timestamp > b.timestamp) },
+  'score_dsc': { name: 'Highest score', method: (a, b) => (a.voteScore < b.voteScore) },
+  'score_asc': { name: 'Lowest score', method: (a, b) => (a.voteScore > b.voteScore) }
+}
+
 class Main extends Component {
   constructor(props) {
     super(props)
+    this.handlerChangeSortBy = this.handlerChangeSortBy.bind(this)
   }
 
   componentDidMount() {
@@ -20,7 +29,20 @@ class Main extends Component {
       this.props.fetchPostsByCategory(category)
   }
 
+  handlerChangeSortBy(ev) {
+    const { value } = ev.target
+    const pathname = this.props.history.location.pathname
+    this.props.history.push({ pathname, search: `sortBy=${value}` })
+  }
+
   render() {
+    const optionSelected = queryString.parse(this.props.location.search).sortBy
+    const options = Object.keys(sortOptions)
+                    .map(key => (<option key={key} value={key}>{sortOptions[key].name}</option>))
+
+    const sortByMethod = sortOptions[optionSelected].method
+    const posts = (sortByMethod) ? this.props.posts.sort(sortByMethod) : this.props.posts
+
     return (
       <div className="container-fluid">
         <Header/>
@@ -34,11 +56,8 @@ class Main extends Component {
             <div className="form-group row">
               <label htmlFor="sortBy" className="col-1 col-form-label text-nowrap">Sort by</label>
               <div className="col-3">
-                <select id="sortBy" className="form-control form-control-sm">
-                  <option>Newest</option>
-                  <option>Oldest</option>
-                  <option>Ascendant score</option>
-                  <option>Descendant score</option>
+                <select id="sortBy" className="form-control form-control-sm" onChange={this.handlerChangeSortBy} defaultValue={optionSelected}>
+                  {options}
                 </select>
               </div>
 
@@ -49,7 +68,7 @@ class Main extends Component {
           </div>
         </div>
 
-        <PostList  posts={this.props.posts}/>
+        <PostList  posts={posts}/>
         
       </div>
     )
