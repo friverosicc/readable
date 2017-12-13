@@ -8,24 +8,24 @@ class Categories extends Component {
     super(props)
   }
 
-  buildLink(path, name, currentPath) {
-    const targetPath = '/'+path
+  buildLink(path, name, currentPath, search) {
+    const targetPath = `/${path}`
     const className = (targetPath === currentPath) ? "active" : ""
 
-    return <Link key={path} className={"nav-link text-capitalize "+className} to={targetPath}>{name}</Link>
+    return <Link key={path} className={"nav-link text-capitalize "+className} to={`${targetPath}${search}`}>{name}</Link>
   }
 
   render() {
-    const { pathname } = this.props.location
+    const { pathname, search } = this.props.location
     const categories = this.props.categories.map(({ path, name}) => (
-      this.buildLink(path, name, pathname)
+      this.buildLink(path, name, pathname, search)
     ))
     
     return (
       <div className="row">
         <div className="col">
           <nav className="nav nav-pills justify-content-center">
-            {this.buildLink('', 'all', pathname)}
+            {this.buildLink('', 'all', pathname, search)}
             {categories}
           </nav>
         </div>

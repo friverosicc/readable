@@ -36,7 +36,8 @@ class Main extends Component {
   }
 
   render() {
-    const optionSelected = queryString.parse(this.props.location.search).sortBy
+    const { search } = this.props.location
+    const optionSelected = (search) ? queryString.parse(search).sortBy : 'timestamp_asc'
     const options = Object.keys(sortOptions)
                     .map(key => (<option key={key} value={key}>{sortOptions[key].name}</option>))
 
