@@ -9,5 +9,6 @@ export const API = 'API'
 export const FETCH_CATEGORIES = asyncActionType('FETCH_CATEGORIES')
 
 export const FETCH_POSTS = asyncActionType('FETCH_POSTS')
+export const FETCH_POST = asyncActionType('FETCH_POST')
 export const SEND_POST_VOTE = asyncActionType('SEND_POST_VOTE')
 export const DELETE_POST = asyncActionType('DELETE_POST')

@@ -1,4 +1,4 @@
-import { API, FETCH_POSTS, SEND_POST_VOTE, DELETE_POST } from '../constants/action-types'
+import { API, FETCH_POSTS, FETCH_POST, SEND_POST_VOTE, DELETE_POST } from '../constants/action-types'
 
 export const fetchPosts = () => ({
   type: API,
@@ -18,4 +18,9 @@ export const sendPostVote = (id, option) => ({
 export const deletePost = (id) => ({
   type: API,
   payload: Object.assign({ url: `posts/${id}`, method: 'DELETE' }, DELETE_POST)
+})
+
+export const fetchPost = (id) => ({
+  type: API,
+  payload: Object.assign({ url: `posts/${id}`, method: 'GET' }, FETCH_POST)
 })
