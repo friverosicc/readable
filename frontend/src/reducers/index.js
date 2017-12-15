@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux'
 import categoriesReducer from './categories-reducer'
 import postsReducer from './posts-reducer'
-
-const comments = (stata, action) => ([])
+import commentsReducer from './comments-reducer'
 
 export default combineReducers({
   categories: categoriesReducer,
   posts: postsReducer,
-  comments
+  comments: commentsReducer
 })

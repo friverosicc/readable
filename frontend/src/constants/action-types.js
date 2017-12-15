@@ -12,3 +12,5 @@ export const FETCH_POSTS = asyncActionType('FETCH_POSTS')
 export const FETCH_POST = asyncActionType('FETCH_POST')
 export const SEND_POST_VOTE = asyncActionType('SEND_POST_VOTE')
 export const DELETE_POST = asyncActionType('DELETE_POST')
+
+export const FETCH_COMMENTS = asyncActionType('FETCH_COMMENTS')
