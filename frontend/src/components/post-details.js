@@ -22,7 +22,7 @@ class PostDetails extends Component {
   render() {
     const post = (this.props.post) ? <Post post={this.props.post}/> : ''
     const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Post' }]
-    const comments = this.props.comments.map(comment => (<Comment comment={comment}/>))
+    const comments = this.props.comments.map(comment => (<Comment key={comment.id} comment={comment}/>))
 
     return(
       <div className="container-fluid">
@@ -46,7 +46,7 @@ const mapStateToProps = ({ posts, comments }, ownProps) => {
 
   const commentList = Object.keys(comments)
                             .map(key => (comments[key]))
-                            .filter(comment => (comment.parentId === id))
+                            .filter(comment => (comment.parentId === id && !comment.deleted))
                             .sort((a, b) => (a.timestamp < b.timestamp))
 
   return {

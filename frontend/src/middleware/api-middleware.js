@@ -15,6 +15,13 @@ const apiMiddleware = ({ dispatch }) => next => action => {
   }   
   const { payload } = action
   const { url, method, body } = payload
+  const notify = data => {
+    if ((typeof action.payload.SUCCESS) === 'string')
+      dispatch({ type: action.payload.SUCCESS, data })
+    else
+      action.payload.SUCCESS.map(nextAction => dispatch({ ...nextAction, data }))
+  }
+
 
   fetch(BASE_URL + url, {
     method,
@@ -22,7 +29,7 @@ const apiMiddleware = ({ dispatch }) => next => action => {
     body: JSON.stringify(body)
   })
   .then(response => response.json())
-  .then(response => dispatch({ type: payload.SUCCESS, data: response }))
+  .then(notify)
 }
 
 export default apiMiddleware

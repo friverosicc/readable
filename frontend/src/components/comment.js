@@ -3,17 +3,17 @@ import moment from 'moment'
 import { MdMoreHoriz, MdEdit, MdDelete, MdComment, MdAccessTime, MdExpandLess, MdExpandMore } from 'react-icons/lib/md'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { sendPostVote, deletePost } from '../actions/post-actions'
+import { sendCommentVote, deleteComment} from '../actions/comment-actions'
 
 const Comment = (props) => {
   const { comment } = props
 
   const vote = (id, option) => {
-    props.sendPostVote(id, option)
+    props.sendCommentVote(id, option)
   }
 
-  const remove = id => {
-    props.deletePost(id)
+  const remove = (postId, commentId) => {
+    props.deleteComment(postId, commentId)
   }
 
   return (
@@ -44,7 +44,7 @@ const Comment = (props) => {
 
               <div className="col-6 text-right">
                 <button type="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</button>
-                <button type="button" className="btn btn-sm btn-secondary" onClick={() => remove(comment.id)}><MdDelete/> Delete</button>
+                <button type="button" className="btn btn-sm btn-secondary" onClick={() => remove(comment.parentId, comment.id)}><MdDelete/> Delete</button>
               </div>
             </div>
           </div>
@@ -56,8 +56,8 @@ const Comment = (props) => {
 
 const mapStateToProps = () => ({})
 const mapDispatchToProps = dispatch => ({
-  sendPostVote: (id, option) => dispatch(sendPostVote(id, option)),
-  deletePost: (id) => dispatch(deletePost(id))
+  sendCommentVote: (id, option) => dispatch(sendCommentVote(id, option)),
+  deleteComment: (postId, commentId) => dispatch(deleteComment(postId, commentId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment)
