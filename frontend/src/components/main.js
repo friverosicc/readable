@@ -43,10 +43,11 @@ class Main extends Component {
 
     const sortByMethod = sortOptions[optionSelected].method
     const posts = (sortByMethod) ? this.props.posts.sort(sortByMethod) : this.props.posts
+    const navigationPath = [{ name: 'Home' }]
 
     return (
       <div className="container-fluid">
-        <Header/>
+        <Header items={navigationPath}/>
 
         <Categories/>
 
