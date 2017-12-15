@@ -1,7 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-import { MdEdit, MdDelete, MdComment, MdAccessTime, MdExpandLess, MdExpandMore } from 'react-icons/lib/md'
+import { MdMoreHoriz, MdEdit, MdDelete, MdComment, MdAccessTime, MdExpandLess, MdExpandMore } from 'react-icons/lib/md'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { sendPostVote, deletePost } from '../actions/post-actions'
 
 const Post = (props) => {
@@ -43,6 +44,7 @@ const Post = (props) => {
               </div>
 
               <div className="col-6 text-right">
+                {(props.showAccessToDetails) ? <Link to={`/${post.category}/${post.id}`} role="button" className="btn btn-sm btn-info mr-1"><MdMoreHoriz/> Details</Link> : ''}
                 <button type="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</button>
                 <button type="button" className="btn btn-sm btn-secondary" onClick={() => remove(post.id)}><MdDelete/> Delete</button>
               </div>
