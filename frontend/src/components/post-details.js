@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import Post from './post'
 import Header from './header'
-import Comment from './comment'
+import CommentList from './comment-list'
 import queryString from 'query-string'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { fetchPost } from '../actions/post-actions'
-import { fetchComments } from '../actions/comment-actions'
 
 class PostDetails extends Component {
   constructor(props) {
@@ -14,17 +13,14 @@ class PostDetails extends Component {
   }
 
   componentDidMount() {
-    const { category, id } = this.props.match.params
+    const { id } = this.props.match.params
     this.props.fetchPost(id)
-    this.props.fetchComments(id)
   }
 
   render() {
-    const post = (this.props.post) ? <Post post={this.props.post}/> : ''
     const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Post' }]
-    const comments = this.props.comments.map(comment => (<Comment key={comment.id} comment={comment}/>))
 
-    return(
+    return (
       <div className="container-fluid">
         <Header items={navigationPath}/>
 
@@ -34,8 +30,12 @@ class PostDetails extends Component {
           </div>
         </div>
 
-        {post}
-        {comments}
+        {(this.props.post) ? (
+          <div>
+            <Post post={this.props.post}/>
+            <CommentList postId={this.props.post.id}/>
+          </div>
+        ) : <div className="text-center"><h1>Post Not Found</h1></div>}
       </div>
     ) 
   }
@@ -43,21 +43,11 @@ class PostDetails extends Component {
 
 const mapStateToProps = ({ posts, comments }, ownProps) => {
   const { id } = ownProps.match.params
-
-  const commentList = Object.keys(comments)
-                            .map(key => (comments[key]))
-                            .filter(comment => (comment.parentId === id && !comment.deleted))
-                            .sort((a, b) => (a.timestamp < b.timestamp))
-
-  return {
-    post: posts[id],
-    comments: commentList
-  }
+  return { post: posts[id] }
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchPost: id => dispatch(fetchPost(id)),
-  fetchComments: id => dispatch(fetchComments(id))
+  fetchPost: id => dispatch(fetchPost(id))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostDetails))
