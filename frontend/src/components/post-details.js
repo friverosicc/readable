@@ -24,12 +24,6 @@ class PostDetails extends Component {
       <div className="container-fluid">
         <Header items={navigationPath}/>
 
-        <div className="row justify-content-center mb-3">
-          <div className="col-xl-6 col-lg-8 text-right">
-            <button className="btn btn-sm btn-primary">New Post</button>
-          </div>
-        </div>
-
         {(this.props.post) ? (
           <div>
             <Post post={this.props.post}/>

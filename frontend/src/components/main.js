@@ -4,7 +4,7 @@ import Categories from './categories'
 import Header from './header'
 import PostList from './post-list'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { fetchPosts, fetchPostsByCategory } from '../actions/post-actions'
 
 const sortOptions = {
@@ -64,7 +64,7 @@ class Main extends Component {
               </div>
 
               <div className="col-8 text-right">
-                <button className="btn btn-sm btn-primary">New Post</button>
+                <Link to="posts/new" role="button" className="btn btn-sm btn-primary">New Post</Link>
               </div>
             </div>
           </div>
