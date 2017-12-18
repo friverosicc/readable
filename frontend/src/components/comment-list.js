@@ -20,12 +20,6 @@ class CommentList extends Component {
 
     return(
       <div className="container-fluid">
-        <div className="row justify-content-center mb-3">
-          <div className="col-xl-6 col-lg-8 text-right">
-            <button className="btn btn-sm btn-primary">New Comment</button>
-          </div>
-        </div>
-
         {comments}
       </div>
     ) 

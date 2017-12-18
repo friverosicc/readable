@@ -1,26 +1,41 @@
-import { API, FETCH_POSTS, FETCH_POST, SEND_POST_VOTE, DELETE_POST } from '../constants/action-types'
+import { API, FETCH_POSTS, FETCH_POST, SEND_POST_VOTE, DELETE_POST, CREATE_POST } from '../constants/action-types'
+import uuid from 'uuid/v1'
 
 export const fetchPosts = () => ({
   type: API,
-  payload: Object.assign({ url: 'posts', method: 'GET' }, FETCH_POSTS)
+  payload: { url: 'posts', method: 'GET', ...FETCH_POSTS }
 })
 
 export const fetchPostsByCategory = (category) => ({
   type: API,
-  payload: Object.assign({ url: `${category}/posts`, method: 'GET' }, FETCH_POSTS)
+  payload: { url: `${category}/posts`, method: 'GET', ...FETCH_POSTS }
 })
 
 export const sendPostVote = (id, option) => ({
   type: API,
-  payload: Object.assign({ url: `posts/${id}`, method: 'POST', body: { option } }, SEND_POST_VOTE)
+  payload: { url: `posts/${id}`, method: 'POST', body: { option }, ...SEND_POST_VOTE }
 })
 
 export const deletePost = (id) => ({
   type: API,
-  payload: Object.assign({ url: `posts/${id}`, method: 'DELETE' }, DELETE_POST)
+  payload: { url: `posts/${id}`, method: 'DELETE', ...DELETE_POST }
 })
 
 export const fetchPost = (id) => ({
   type: API,
-  payload: Object.assign({ url: `posts/${id}`, method: 'GET' }, FETCH_POST)
+  payload: { url: `posts/${id}`, method: 'GET', ...FETCH_POST }
+})
+
+export const createPost = (post) => ({
+  type: API,
+  payload: {
+    url: `posts`,
+    method: 'POST',
+    body: {
+      ...post,
+      timestamp: Date.now(),
+      id: uuid()
+    },
+    ...CREATE_POST
+  },
 })

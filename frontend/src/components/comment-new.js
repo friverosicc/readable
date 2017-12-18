@@ -1,27 +1,26 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import Header from './header'
 import { connect } from 'react-redux'
-import { createPost } from '../actions/post-actions'
+import { createComment } from '../actions/comment-actions'
 
-class PostNew extends Component {
+class CommentNew extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      title: '',
+      parentId: props.match.params.id,
       author: '',
-      category: '',
       body: ''
     }
 
-    this.createPostRequestSent = false
+    this.createCommentRequestSent = false
     this.save = this.save.bind(this)
   }
 
   save() {
-    this.props.createPost(this.state)
-    this.createPostRequestSent = true
+    this.props.createComment(this.state)
+    this.createCommentRequestSent = true
   }
 
   isValid() {
@@ -36,25 +35,21 @@ class PostNew extends Component {
     return valid
   }
 
-  componentWillReceiveProps({ categories }) {
-    if (categories)
-      this.setState({ category: categories[0].name })
+  componentWillReceiveProps(newProps) {
+    this.setState({ parentId: newProps.match.params.id })
   }
 
   render() {
-    const categories = this.props.categories.map(({ name }) => (
-      <option key={name} value={name}>{name}</option>
-    ))
-
-    const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Create a new post' }]
+    const { category, id } = this.props.match.params
+    const navigationPath = [{ url: '/', name: 'Home'}, { url: `/${category}/${id}`, name: 'Post' }, { name: 'Create a new comment' }]
     const requiredMessage = <div className="invalid-feedback">This field is required</div>
     const disabled = (this.isValid()) ? '' : 'disabled' 
 
-    if (!this.props.processing && this.createPostRequestSent)
+    if (!this.props.processing && this.createCommentRequestSent)
       return (
         <div className="container-fluid">
           <Header items={navigationPath}/>
-          <div className="alert alert-success" role="alert">Post created successfully <Link to="/">Go back to the post list</Link></div>
+          <div className="alert alert-success" role="alert">Comment created successfully <Link to={`/${category}/${id}`}>Go back to the post</Link></div>
         </div>
       )
 
@@ -65,17 +60,6 @@ class PostNew extends Component {
           <div className="col-xl-6 col-lg-8">
             <form>
               <div className="form-group">
-                <label htmlFor="txtTitle">Title</label>
-                <input type="text"
-                       id="txtTitle"
-                       className={(this.state.title) ? "form-control" : "form-control is-invalid"}
-                       required
-                       value={this.state.title}
-                       onChange={event => this.setState({ title: event.target.value })}/>
-              {(this.state.title) ? '' : requiredMessage} 
-              </div>
-
-              <div className="form-group">
                 <label htmlFor="txtAuthor">Author</label>
                 <input type="text"
                        id="txtAuthor"
@@ -83,16 +67,6 @@ class PostNew extends Component {
                        required
                        onChange={event => this.setState({ author: event.target.value})}/>
                 {(this.state.author) ? '' : requiredMessage} 
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="slcCategory">Category</label>
-                <select id="slcCategory"
-                        className="form-control"
-                        defaultValue={this.state.category}
-                        onChange={event => this.setState({ category: event.target.value })}>
-                  {categories}
-                </select>
               </div>
 
               <div className="form-group">
@@ -122,14 +96,9 @@ class PostNew extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, processing }) => ({
-  categories: Object.keys(categories).map(key => (categories[key])),
-  processing
-})
-
-
+const mapStateToProps = ({ processing }) => ({  processing })
 const mapDispatchToProps = dispatch => ({
-  createPost: post => dispatch(createPost(post))
+  createComment: comment => dispatch(createComment(comment))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostNew)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CommentNew))

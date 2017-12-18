@@ -4,7 +4,7 @@ import Header from './header'
 import CommentList from './comment-list'
 import queryString from 'query-string'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { fetchPost } from '../actions/post-actions'
 
 class PostDetails extends Component {
@@ -25,7 +25,13 @@ class PostDetails extends Component {
         <Header items={navigationPath}/>
 
         {(this.props.post) ? (
-          <div>
+          <div className="container-fluid">
+            <div className="row justify-content-center mb-3">
+              <div className="col-xl-6 col-lg-8 text-right">
+                <Link role="button" to={`/${this.props.post.category}/${this.props.post.id}/comments/new`}className="btn btn-sm btn-primary">New Comment</Link>
+              </div>
+            </div>
+
             <Post post={this.props.post}/>
             <CommentList postId={this.props.post.id}/>
           </div>

@@ -1,14 +1,15 @@
-import { API, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT } from '../constants/action-types'
+import { API, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT } from '../constants/action-types'
 import { fetchPost } from './post-actions'
+import uuid from 'uuid/v1'
 
 export const fetchComments = (postId) => ({
   type: API,
-  payload: Object.assign({ url: `posts/${postId}/comments`, method: 'GET' }, FETCH_COMMENTS)
+  payload: { url: `posts/${postId}/comments`, method: 'GET', ...FETCH_COMMENTS }
 })
 
 export const sendCommentVote = (id, option) => ({
   type: API,
-  payload: Object.assign({ url: `comments/${id}`, method: 'POST', body: { option } }, SEND_COMMENT_VOTE)
+  payload: { url: `comments/${id}`, method: 'POST', body: { option }, ...SEND_COMMENT_VOTE }
 })
 
 export const deleteComment = (postId, commentId) => ({
@@ -18,4 +19,18 @@ export const deleteComment = (postId, commentId) => ({
     method: 'DELETE',
     SUCCESS: [{ type: DELETE_COMMENT.SUCCESS }, fetchPost(postId)]
   }
+})
+
+export const createComment = (comment) => ({
+  type: API,
+  payload: {
+    url: 'comments',
+    method: 'POST',
+    body: {
+      ...comment,
+      timestamp: Date.now(),
+      id: uuid()
+    },
+    ...CREATE_COMMENT
+  },
 })

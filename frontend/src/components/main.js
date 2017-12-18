@@ -77,7 +77,9 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }) => ({ posts: Object.keys(posts).map(key => (posts[key])) })
+const mapStateToProps = ({ posts }) => ({
+  posts: Object.keys(posts).filter(key => (key !== 'processing')).map(key => (posts[key]))
+})
 const mapDispatchToProps = dispatch => ({
   fetchPosts: () => dispatch(fetchPosts()),
   fetchPostsByCategory: (category) => dispatch(fetchPostsByCategory(category))
