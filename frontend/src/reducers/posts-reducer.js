@@ -5,12 +5,10 @@ const defaultState = { processing: false }
 const postsReducer = (state=defaultState, action) => {
   switch(action.type) {
     case FETCH_POSTS.SUCCESS:
-      const newState = action.data.reduce((obj, item) => {
+      return action.data.reduce((obj, item) => {
         obj[item.id] = item
         return obj
-      }, {})
-
-      return { ...newState, processing: false}
+      }, { processing: false })
 
     case FETCH_POST.SUCCESS:
       return { ...state, [action.data.id]: action.data, processing: false }
@@ -18,8 +16,16 @@ const postsReducer = (state=defaultState, action) => {
     case SEND_POST_VOTE.SUCCESS:
       return { ...state, [action.data.id]: action.data, processing: false }
 
+    case DELETE_POST.PENDING:
+      return { ...state, processing: true }
+
     case DELETE_POST.SUCCESS:
-      return { ...state, [action.data.id]: action.data, processing: false }
+      const keys = Object.keys(state).filter(key => key !== action.data.id)
+
+      return keys.reduce((obj, item) => {
+        obj[item] = state[item]
+        return obj
+      }, { processing: false })
 
     case CREATE_POST.PENDING:
       return { ...state, processing: true }

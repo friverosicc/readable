@@ -31,7 +31,7 @@ const mapStateToProps = ({ comments }, ownProps) => {
 
   const commentList = Object.keys(comments)
                             .map(key => (comments[key]))
-                            .filter(comment => (comment.parentId === postId && !comment.deleted))
+                            .filter(comment => (comment.parentId === postId))
                             .sort((a, b) => (a.timestamp < b.timestamp))
 
   return { comments: commentList }

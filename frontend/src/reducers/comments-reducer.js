@@ -14,7 +14,12 @@ const commentsReducer = (state=defaultState, action) => {
       return { ...state, [action.data.id]: action.data, processing: false }
 
     case DELETE_COMMENT.SUCCESS:
-      return { ...state, [action.data.id]: action.data, processing: false }
+      const keys = Object.keys(state).filter(key => key !== action.data.id)
+
+      return keys.reduce((obj, item) => {
+        obj[item] = state[item]
+        return obj
+      }, { processing: false })
 
     case CREATE_COMMENT.PENDING:
       return { ...state, processing: true }

@@ -28,7 +28,7 @@ class PostDetails extends Component {
           <div className="container-fluid">
             <div className="row justify-content-center mb-3">
               <div className="col-xl-6 col-lg-8 text-right">
-                <Link role="button" to={`/${this.props.post.category}/${this.props.post.id}/comments/new`}className="btn btn-sm btn-primary">New Comment</Link>
+                <Link role="button" to={`/${this.props.post.category}/${this.props.post.id}/comments/new`} className="btn btn-sm btn-primary">New Comment</Link>
               </div>
             </div>
 
@@ -41,9 +41,9 @@ class PostDetails extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, comments }, ownProps) => {
+const mapStateToProps = ({ posts, processing }, ownProps) => {
   const { id } = ownProps.match.params
-  return { post: posts[id] }
+  return { post: posts[id], processing }
 }
 
 const mapDispatchToProps = dispatch => ({

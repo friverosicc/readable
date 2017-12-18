@@ -31,7 +31,8 @@ const apiMiddleware = ({ dispatch }) => next => action => {
   .then(response => response.json())
   .then(notify)
 
-  dispatch({ type: action.payload.PENDING })
+  if (action.payload.PENDING)
+    dispatch({ type: action.payload.PENDING })
 }
 
 export default apiMiddleware

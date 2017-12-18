@@ -11,7 +11,7 @@ class PostNew extends Component {
     this.state = {
       title: '',
       author: '',
-      category: '',
+      category: (props.categories[0]) ? props.categories[0].name : '',
       body: ''
     }
 
@@ -37,7 +37,7 @@ class PostNew extends Component {
   }
 
   componentWillReceiveProps({ categories }) {
-    if (categories)
+    if (categories[0])
       this.setState({ category: categories[0].name })
   }
 
