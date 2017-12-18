@@ -45,7 +45,7 @@ const Post = (props) => {
 
               <div className="col-6 text-right">
                 {(props.showAccessToDetails) ? <Link to={`/${post.category}/${post.id}`} role="button" className="btn btn-sm btn-info mr-1"><MdMoreHoriz/> Details</Link> : ''}
-                <button type="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</button>
+                <Link to={`/${post.category}/${post.id}/edit`} role="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</Link>
                 <button type="button" className="btn btn-sm btn-secondary" onClick={() => remove(post.id)}><MdDelete/> Delete</button>
               </div>
             </div>

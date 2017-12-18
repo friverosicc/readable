@@ -2,17 +2,22 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from './header'
 import { connect } from 'react-redux'
-import { createPost } from '../actions/post-actions'
+import { createPost, fetchPost } from '../actions/post-actions'
 
-class PostNew extends Component {
+class PostEdit extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      title: '',
-      author: '',
-      category: (props.categories[0]) ? props.categories[0].name : '',
-      body: ''
+    if (props.post) {
+      const { title, author, category, body } = props.post
+      this.state = { title, author, category, body }
+    } else {
+      this.state = {
+        title: '',
+        author: '',
+        category: '',
+        body: ''
+      }
     }
 
     this.createPostRequestSent = false
@@ -36,9 +41,15 @@ class PostNew extends Component {
     return valid
   }
 
-  componentWillReceiveProps({ categories }) {
-    if (categories[0])
-      this.setState({ category: categories[0].name })
+  componentDidMount() {
+    this.props.fetchPost(this.props.match.params.id)
+  }
+
+  componentWillReceiveProps({ post }) {
+    if (post) {
+      const { title, author, category, body } = post
+      this.setState({ title, author, category, body })
+    }
   }
 
   render() {
@@ -46,7 +57,7 @@ class PostNew extends Component {
       <option key={name} value={name}>{name}</option>
     ))
 
-    const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Create a new post' }]
+    const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Edit post' }]
     const requiredMessage = <div className="invalid-feedback">This field is required</div>
     const disabled = (this.isValid()) ? '' : 'disabled' 
 
@@ -54,7 +65,7 @@ class PostNew extends Component {
       return (
         <div className="container-fluid">
           <Header items={navigationPath}/>
-          <div className="alert alert-success" role="alert">Post created successfully <Link to="/">Go back to the post list</Link></div>
+          <div className="alert alert-success" role="alert">Post updated successfully <Link to="/">Go back to the post list</Link></div>
         </div>
       )
 
@@ -124,14 +135,16 @@ class PostNew extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, processing }) => ({
+const mapStateToProps = ({ categories, posts, processing }, ownProps) => ({
+  post: posts[ownProps.match.params.id],
   categories: Object.keys(categories).map(key => (categories[key])),
   processing
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  createPost: post => dispatch(createPost(post))
+  createPost: post => dispatch(createPost(post)),
+  fetchPost: id => dispatch(fetchPost(id))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostNew)
+export default connect(mapStateToProps, mapDispatchToProps)(PostEdit)

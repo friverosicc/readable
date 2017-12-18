@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import Main from './components/main'
 import PostDetails from './components/post-details'
 import PostNew from './components/post-new'
+import PostEdit from './components/post-edit'
 import CommentNew from './components/comment-new'
 import { fetchCategories } from './actions/category-actions'
 import { connect } from 'react-redux'
@@ -25,7 +26,8 @@ class App extends Component {
         {categoryRoutes}
         <Route exact path="/posts/new" component={PostNew}/>
         <Route exact path="/:category/:id" component={PostDetails} />
-        <Route exact path="/:category/:id/comments/new" render={(category, id) => (<CommentNew category={category} id={id}/>)} />
+        <Route exact path="/:category/:id/edit" component={PostEdit} />
+        <Route exact path="/:category/:id/comments/new" component={CommentNew} />
         <Route render={() => <h1>Page Not Found</h1>} />
       </Switch>
     )
