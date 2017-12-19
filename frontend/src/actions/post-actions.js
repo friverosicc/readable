@@ -47,7 +47,7 @@ export const editPost = (post) => ({
     method: 'PUT',
     body: {
       ...post,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     },
     ...EDIT_POST
   },

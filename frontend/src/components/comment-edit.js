@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from './header'
 import { connect } from 'react-redux'
-import { createComment, fetchComment } from '../actions/comment-actions'
+import { editComment, fetchComment } from '../actions/comment-actions'
 
 class CommentEdit extends Component {
   constructor(props) {
@@ -18,13 +18,13 @@ class CommentEdit extends Component {
       }
     }
 
-    this.createCommentRequestSent = false
+    this.editCommentRequestSent = false
     this.save = this.save.bind(this)
   }
 
   save() {
-    this.props.createComment(this.state)
-    this.createCommentRequestSent = true
+    this.props.editComment({ body: this.state.body, id: this.props.comment.id })
+    this.editCommentRequestSent = true
   }
 
   isValid() {
@@ -56,11 +56,11 @@ class CommentEdit extends Component {
     const requiredMessage = <div className="invalid-feedback">This field is required</div>
     const disabled = (this.isValid()) ? '' : 'disabled' 
 
-    if (!this.props.processing && this.createCommentRequestSent)
+    if (!this.props.processing && this.editCommentRequestSent)
       return (
         <div className="container-fluid">
           <Header items={navigationPath}/>
-          <div className="alert alert-success" role="alert">Comment updated successfully <Link to="/">Go back to the post detail</Link></div>
+          <div className="alert alert-success" role="alert">Comment updated successfully <Link to={`/${category}/${postId}`}>Go back to the post detail</Link></div>
         </div>
       )
 
@@ -74,11 +74,9 @@ class CommentEdit extends Component {
                 <label htmlFor="txtAuthor">Author</label>
                 <input type="text"
                        id="txtAuthor"
-                       className={(this.state.author) ? "form-control" : "form-control is-invalid"}
-                       required
-                       value={this.state.author}
-                       onChange={event => this.setState({ author: event.target.value})}/>
-                {(this.state.author) ? '' : requiredMessage} 
+                       disabled
+                       className="form-control"
+                       value={this.state.author}/>
               </div>
 
               <div className="form-group">
@@ -116,7 +114,7 @@ const mapStateToProps = ({ comments, processing }, ownProps) => ({
 
 
 const mapDispatchToProps = dispatch => ({
-  createComment: comment => dispatch(createComment(comment)),
+  editComment: comment => dispatch(editComment(comment)),
   fetchComment: id => dispatch(fetchComment(id))
 })
 

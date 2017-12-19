@@ -1,4 +1,4 @@
-import { API, FETCH_COMMENT, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT } from '../constants/action-types'
+import { API, FETCH_COMMENT, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT, EDIT_COMMENT } from '../constants/action-types'
 import { fetchPost } from './post-actions'
 import uuid from 'uuid/v1'
 
@@ -37,5 +37,18 @@ export const createComment = (comment) => ({
       id: uuid()
     },
     ...CREATE_COMMENT
+  },
+})
+
+export const editComment = (comment) => ({
+  type: API,
+  payload: {
+    url: `comments/${comment.id}`,
+    method: 'PUT',
+    body: {
+      ...comment,
+      timestamp: Date.now()
+    },
+    ...EDIT_COMMENT
   },
 })

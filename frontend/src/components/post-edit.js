@@ -9,12 +9,14 @@ class PostEdit extends Component {
     super(props)
 
     if (props.post) {
-      const { title, body } = props.post
-      this.state = { title, body }
+      const { title, author, category, body } = props.post
+      this.state = { title, author, category, body }
     } else {
       this.state = {
         title: '',
-        body: ''
+        body: '',
+        author: '',
+        category: ''
       }
     }
 
@@ -45,8 +47,8 @@ class PostEdit extends Component {
 
   componentWillReceiveProps({ post }) {
     if (post) {
-      const { title, body } = post
-      this.setState({ title, body })
+      const { title, body, author, category } = post
+      this.setState({ title, body, author, category })
     }
   }
 
@@ -78,6 +80,24 @@ class PostEdit extends Component {
                        value={this.state.title}
                        onChange={event => this.setState({ title: event.target.value })}/>
               {(this.state.title) ? '' : requiredMessage} 
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="txtAuthor">Author</label>
+                <input type="text"
+                       id="txtAuthor"
+                       className="form-control"
+                       disabled
+                       value={this.state.author}/>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="txtCategory">Category</label>
+                <input type="text"
+                       id="txtCategory"
+                       className="form-control"
+                       disabled
+                       value={this.state.category}/>
               </div>
 
               <div className="form-group">
