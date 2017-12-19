@@ -1,10 +1,15 @@
-import { API, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT } from '../constants/action-types'
+import { API, FETCH_COMMENT, FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT } from '../constants/action-types'
 import { fetchPost } from './post-actions'
 import uuid from 'uuid/v1'
 
 export const fetchComments = (postId) => ({
   type: API,
   payload: { url: `posts/${postId}/comments`, method: 'GET', ...FETCH_COMMENTS }
+})
+
+export const fetchComment = (commentId) => ({
+  type: API,
+  payload: { url: `comments/${commentId}`, method: 'GET', ...FETCH_COMMENT }
 })
 
 export const sendCommentVote = (id, option) => ({

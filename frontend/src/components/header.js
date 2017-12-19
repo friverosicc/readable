@@ -17,7 +17,7 @@ const Header = ({ items=[] }) => {
   return (
     <div className="row">
       <div className="col">
-        <nav aria-label="breadcrumb" role="navigation">
+        <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             {list}
           </ol>

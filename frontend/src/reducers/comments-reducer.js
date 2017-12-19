@@ -1,4 +1,4 @@
-import { FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT } from '../constants/action-types'
+import { FETCH_COMMENTS, SEND_COMMENT_VOTE, DELETE_COMMENT, CREATE_COMMENT, FETCH_COMMENT } from '../constants/action-types'
 
 const defaultState = { processing: false }
 
@@ -9,6 +9,9 @@ const commentsReducer = (state=defaultState, action) => {
         obj[item.id] = item
         return obj
       }, { processing: false })
+
+    case FETCH_COMMENT.SUCCESS:
+      return { ...state, processing: false, [action.data.id]: action.data }
 
     case SEND_COMMENT_VOTE.SUCCESS:
       return { ...state, [action.data.id]: action.data, processing: false }

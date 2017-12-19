@@ -5,14 +5,11 @@ import PostDetails from './components/post-details'
 import PostNew from './components/post-new'
 import PostEdit from './components/post-edit'
 import CommentNew from './components/comment-new'
+import CommentEdit from './components/comment-edit'
 import { fetchCategories } from './actions/category-actions'
 import { connect } from 'react-redux'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     this.props.fetchCategories()
   }
@@ -28,6 +25,7 @@ class App extends Component {
         <Route exact path="/:category/:id" component={PostDetails} />
         <Route exact path="/:category/:id/edit" component={PostEdit} />
         <Route exact path="/:category/:id/comments/new" component={CommentNew} />
+        <Route exact path="/:category/:postId/comments/:commentId" component={CommentEdit} />
         <Route render={() => <h1>Page Not Found</h1>} />
       </Switch>
     )

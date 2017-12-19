@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { sendCommentVote, deleteComment} from '../actions/comment-actions'
 
 const Comment = (props) => {
-  const { comment } = props
+  const { post, comment } = props
 
   const vote = (id, option) => {
     props.sendCommentVote(id, option)
@@ -16,7 +16,7 @@ const Comment = (props) => {
     props.deleteComment(postId, commentId)
   }
 
-  return (
+  return (post) ? (
     <div className="row justify-content-center">
       <div className="col-xl-6 col-lg-8">
         <div className="card mb-3 bg-light">
@@ -43,7 +43,7 @@ const Comment = (props) => {
               </div>
 
               <div className="col-6 text-right">
-                <button type="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</button>
+                <Link to={`/${post.category}/${post.id}/comments/${comment.id}`} role="button" className="btn btn-sm btn-primary mr-1"><MdEdit/> Edit</Link>
                 <button type="button" className="btn btn-sm btn-secondary" onClick={() => remove(comment.parentId, comment.id)}><MdDelete/> Delete</button>
               </div>
             </div>
@@ -51,10 +51,10 @@ const Comment = (props) => {
         </div>
       </div>
     </div>
-  )
+  ) : ''
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = ({ posts }, { comment }) => ({ post: posts[comment.parentId] })
 const mapDispatchToProps = dispatch => ({
   sendCommentVote: (id, option) => dispatch(sendCommentVote(id, option)),
   deleteComment: (postId, commentId) => dispatch(deleteComment(postId, commentId))
