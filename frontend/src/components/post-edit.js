@@ -2,31 +2,29 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Header from './header'
 import { connect } from 'react-redux'
-import { createPost, fetchPost } from '../actions/post-actions'
+import { editPost, fetchPost } from '../actions/post-actions'
 
 class PostEdit extends Component {
   constructor(props) {
     super(props)
 
     if (props.post) {
-      const { title, author, category, body } = props.post
-      this.state = { title, author, category, body }
+      const { title, body } = props.post
+      this.state = { title, body }
     } else {
       this.state = {
         title: '',
-        author: '',
-        category: '',
         body: ''
       }
     }
 
-    this.createPostRequestSent = false
+    this.editPostRequestSent = false
     this.save = this.save.bind(this)
   }
 
   save() {
-    this.props.createPost(this.state)
-    this.createPostRequestSent = true
+    this.props.editPost({ ...this.state, id: this.props.post.id })
+    this.editPostRequestSent = true
   }
 
   isValid() {
@@ -47,21 +45,17 @@ class PostEdit extends Component {
 
   componentWillReceiveProps({ post }) {
     if (post) {
-      const { title, author, category, body } = post
-      this.setState({ title, author, category, body })
+      const { title, body } = post
+      this.setState({ title, body })
     }
   }
 
   render() {
-    const categories = this.props.categories.map(({ name }) => (
-      <option key={name} value={name}>{name}</option>
-    ))
-
     const navigationPath = [{ url: '/', name: 'Home'}, { name: 'Edit post' }]
     const requiredMessage = <div className="invalid-feedback">This field is required</div>
     const disabled = (this.isValid()) ? '' : 'disabled' 
 
-    if (!this.props.processing && this.createPostRequestSent)
+    if (!this.props.processing && this.editPostRequestSent)
       return (
         <div className="container-fluid">
           <Header items={navigationPath}/>
@@ -84,27 +78,6 @@ class PostEdit extends Component {
                        value={this.state.title}
                        onChange={event => this.setState({ title: event.target.value })}/>
               {(this.state.title) ? '' : requiredMessage} 
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="txtAuthor">Author</label>
-                <input type="text"
-                       id="txtAuthor"
-                       className={(this.state.author) ? "form-control" : "form-control is-invalid"}
-                       required
-                       value={this.state.author}
-                       onChange={event => this.setState({ author: event.target.value})}/>
-                {(this.state.author) ? '' : requiredMessage} 
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="slcCategory">Category</label>
-                <select id="slcCategory"
-                        className="form-control"
-                        value={this.state.category}
-                        onChange={event => this.setState({ category: event.target.value })}>
-                  {categories}
-                </select>
               </div>
 
               <div className="form-group">
@@ -135,15 +108,14 @@ class PostEdit extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, posts, processing }, ownProps) => ({
+const mapStateToProps = ({ posts, processing }, ownProps) => ({
   post: posts[ownProps.match.params.id],
-  categories: Object.keys(categories).map(key => (categories[key])),
   processing
 })
 
 
 const mapDispatchToProps = dispatch => ({
-  createPost: post => dispatch(createPost(post)),
+  editPost: post => dispatch(editPost(post)),
   fetchPost: id => dispatch(fetchPost(id))
 })
 

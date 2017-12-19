@@ -1,4 +1,4 @@
-import { FETCH_POST, FETCH_POSTS, SEND_POST_VOTE, DELETE_POST, CREATE_POST } from '../constants/action-types'
+import { FETCH_POST, FETCH_POSTS, SEND_POST_VOTE, DELETE_POST, CREATE_POST, EDIT_POST } from '../constants/action-types'
 
 const defaultState = { processing: false }
 
@@ -31,6 +31,12 @@ const postsReducer = (state=defaultState, action) => {
       return { ...state, processing: true }
 
     case CREATE_POST.SUCCESS:
+      return { ...state, [action.data.id]: action.data, processing: false }
+
+    case EDIT_POST.PENDING:
+      return { ...state, processing: true }
+
+    case EDIT_POST.SUCCESS:
       return { ...state, [action.data.id]: action.data, processing: false }
 
     default:

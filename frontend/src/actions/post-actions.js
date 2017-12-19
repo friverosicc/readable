@@ -1,4 +1,4 @@
-import { API, FETCH_POSTS, FETCH_POST, SEND_POST_VOTE, DELETE_POST, CREATE_POST } from '../constants/action-types'
+import { API, FETCH_POSTS, FETCH_POST, SEND_POST_VOTE, DELETE_POST, CREATE_POST, EDIT_POST } from '../constants/action-types'
 import uuid from 'uuid/v1'
 
 export const fetchPosts = () => ({
@@ -37,5 +37,18 @@ export const createPost = (post) => ({
       id: uuid()
     },
     ...CREATE_POST
+  },
+})
+
+export const editPost = (post) => ({
+  type: API,
+  payload: {
+    url: `posts/${post.id}`,
+    method: 'PUT',
+    body: {
+      ...post,
+      timestamp: Date.now(),
+    },
+    ...EDIT_POST
   },
 })
